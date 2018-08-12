@@ -29,16 +29,24 @@ class IPController extends Controller
                 'required',
                 new IPAddress(),
                 new IPAccessible(),
-                new IPBelongToUser(),
+/*                new IPBelongToUser(),*/
                 'unique:ip,ip'
             ],
             'email' => strlen($request->email) ? 'email' : ''
         ], $messages);
 
         if($validator->passes()){
+            $ip_info = $this->getIPInfo($request->ip_address);
             $ip = new IP();
             $ip->ip = $request->ip_address;
             $ip->email = $request->email;
+            $ip->city = $ip_info->city;
+            $ip->region = $ip_info->region;
+            $ip->country = $ip_info->country;
+            $ip->loc = $ip_info->loc;
+            $ip->postal = $ip_info->postal;
+            $ip->org = $ip_info->org;
+
             if($ip->save()){
                 $ip->log()->create([
                     'status' => true
@@ -83,5 +91,11 @@ class IPController extends Controller
             return view('404')
                         ->with('ip', $ip_address);
         }
+    }
+
+    private function getIPInfo($ip){
+        $url = "https://ipinfo.io/$ip/json";
+        $json = file_get_contents($url);
+        return json_decode($json);
     }
 }
