@@ -60,9 +60,8 @@ class LogIPs extends Command
         }
     }
 
-
     private function isReachable($ip) {
-        $pingresult = exec("/bin/ping -c 1 $ip", $outcome, $status);
+        $pingresult = exec("/bin/ping -c 4 $ip", $outcome, $status);
         return $status === 0;
     }
 }
