@@ -16,13 +16,13 @@
                    required>
 
             @if($errors->has('ip_address'))
-                <div class="alert alert-danger mt-">
+                <div class="alert alert-danger mt-3">
                     {{$errors->first('ip_address')}}
                 </div>
             @endif
 
             @if(session()->has('message'))
-                <div class="alert alert-info mt-">
+                <div class="alert alert-info mt-3">
                     {{session()->get('message')}}
                 </div>
             @endif
