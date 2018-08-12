@@ -15,6 +15,7 @@
         <table class="table table-striped mt-5 text-center">
             <thead>
             <tr>
+                <th scope="col"></th>
                 <th scope="col">Status</th>
                 <th scope="col">Time</th>
                 <th scope="col">Date</th>
@@ -25,7 +26,8 @@
                     <tr>
                         <td>
                             <img src="{{$stat->status ? '/img/internet_up.png' : '/img/internet_down.png'}}" alt="" width="35">
-
+                        </td>
+                        <td>
                             <b>{{$stat->status ? 'Connected' : 'Disconnected'}}</b>
                         </td>
                         <td>
