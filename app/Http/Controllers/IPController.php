@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\IP;
 use App\Rules\IPAccessible;
 use App\Rules\IPAddress;
+use App\Rules\IPBelongToUser;
 use Illuminate\Http\Request;
 
 class IPController extends Controller
@@ -28,6 +29,7 @@ class IPController extends Controller
                 'required',
                 new IPAddress(),
                 new IPAccessible(),
+                new IPBelongToUser(),
                 'unique:ip,ip'
             ],
             'email' => strlen($request->email) ? 'email' : ''
