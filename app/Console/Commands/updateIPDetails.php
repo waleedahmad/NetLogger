@@ -42,12 +42,12 @@ class updateIPDetails extends Command
 
         foreach($ips as $ip){
             $ip_info = $this->getIPInfo($ip->ip);
-            $ip->city = $ip_info->city;
-            $ip->region = $ip_info->region;
-            $ip->country = $ip_info->country;
-            $ip->loc = $ip_info->loc;
-            $ip->postal = $ip_info->postal;
-            $ip->org = $ip_info->org;
+            $ip->city = isset($ip_info->city) ? $ip_info->city : NULL;
+            $ip->region = isset($ip_info->region) ? $ip_info->region : NULL;
+            $ip->country = isset($ip_info->country) ? $ip_info->country : NULL;
+            $ip->loc = isset($ip_info->loc) ? $ip_info->loc : NULL;
+            $ip->postal = isset($ip_info->postal) ? $ip_info->postal : NULL;
+            $ip->org = isset($ip_info->org) ? $ip_info->org : NULL;
             $ip->save();
         }
     }
