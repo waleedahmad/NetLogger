@@ -30,10 +30,12 @@
                             <b>{{$stat->status ? 'Connected' : 'Disconnected'}}</b>
                         </td>
                         <td>
-                            {{$stat->created_at->toTimeString()}}
+                            {{$stat->created_at->format('h:i:s A')}}
+
                         </td>
                         <td>
-                            {{$stat->created_at->format('h:i:s A')}}
+                            {{$stat->created_at->toDateString()}}
+
                         </td>
                     </tr>
                 @endforeach
