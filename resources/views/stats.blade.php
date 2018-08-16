@@ -11,23 +11,24 @@
             Network Stats
         </h5>
 
-        <table class="table table-striped mt-5 text-center">
-            <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Status</th>
-                <th scope="col">Time</th>
-                <th scope="col">Date</th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach($stats->get() as $stat)
+        <div>
+            <table class="table table-striped mt-5 text-center">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($stats as $stat)
                     <tr>
                         <td>
                             <img src="{{$stat->status ? '/img/internet_up.png' : '/img/internet_down.png'}}" alt="" width="35">
                         </td>
                         <td>
-                            <b>{{$stat->status ? 'Connected' : 'Disconnected'}}</b>
+                            <b>{{$stat->status ? 'Up' : 'Down'}}</b>
                         </td>
                         <td>
                             {{$stat->created_at->format('h:i:s A')}}
@@ -35,11 +36,15 @@
                         </td>
                         <td>
                             {{$stat->created_at->toDateString()}}
-
                         </td>
                     </tr>
                 @endforeach
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center">
+            {{ $stats->links() }}
+        </div>
     </div>
 @endSection

@@ -83,7 +83,7 @@ class IPController extends Controller
     {
         $ip = IP::where('ip', '=', $ip_address)->first();
         if($ip){
-            $stats = $ip->log()->orderBy('created_at', 'DESC');
+            $stats = $ip->log()->orderBy('created_at', 'DESC')->paginate(10);
             return view('stats')
                 ->with('ip', $ip)
                 ->with('stats', $stats);
