@@ -11,9 +11,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/add/ip">Add your IP</a>
-                </li>
+                @if(!request()->is('dashboard'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add/ip">Add your IP</a>
+                    </li>
+                @endif
+
+                @if(auth()->check())
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
