@@ -11,6 +11,24 @@
             Network Stats
         </h5>
 
+        <h5 class="text-center mt-3">
+            <span class="text-primary">{{$ip->disconnects->count()}}</span>
+            disconnects since
+            <span class="text-primary">
+                {{Carbon\Carbon::now()->subMonth(1)->format('Y-m-d')}}
+            </span>
+        </h5>
+
+        <h5 class="text-center mt-3">
+            Remained down for
+            <span class="text-primary">{{$ip->downtime()[0]}}</span>
+            Hours or
+            <span class="text-primary">
+                {{$ip->downtime()[1]}}
+            </span>
+            Minutes
+        </h5>
+
         <div>
             <table class="table table-striped mt-5 text-center">
                 <thead>
