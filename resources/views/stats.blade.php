@@ -15,7 +15,7 @@
             <span class="text-primary">{{$ip->disconnects->count()}}</span>
             disconnects since
             <span class="text-primary">
-                {{Carbon\Carbon::now()->subMonth(1)->format('Y-m-d')}}
+                {{$curr_month->format('M jS Y')}}
             </span>
         </h5>
 

@@ -6,6 +6,7 @@ use App\IP;
 use App\Rules\IPAccessible;
 use App\Rules\IPAddress;
 use App\Rules\IPBelongToUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class IPController extends Controller
@@ -81,12 +82,25 @@ class IPController extends Controller
 
     public function getIPStats($ip_address)
     {
+        $curr_month = Carbon::now()->startOfMonth();
         $ip = IP::where('ip', '=', $ip_address)->first();
         if($ip){
-            $stats = $ip->log()->orderBy('created_at', 'DESC')->paginate(10);
-            return view('stats')
-                ->with('ip', $ip)
-                ->with('stats', $stats);
+            $stats = $ip->log()
+                        ->whereRaw(
+                            'date(created_at) >= ?',
+                            $curr_month->format('Y-m-d')
+                        )
+                        ->whereRaw(
+                            'date(created_at) <= ?',
+                            Carbon::now()->endOfMonth()->format('Y-m-d')
+                        )
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate(20);
+            return view('stats', compact([
+                'ip', $ip,
+                'stats', $stats,
+                'curr_month' , $curr_month
+            ]));
         }else{
             return view('404')
                         ->with('ip', $ip_address);
