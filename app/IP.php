@@ -46,6 +46,17 @@ class IP extends Model
                 $start = $end = null;
             }
         }
+
+        if($disconnects->count()){
+            $last = $disconnects[$disconnects->count() - 1];
+
+            if(!$last->status){
+                $start = $last->created_at;
+                $end = Carbon::now();
+                $secs += $end->diffInSeconds($start);
+            }
+        }
+
         return [
             round($secs / 60 / 60, 1),
             round($secs / 60, 1)
