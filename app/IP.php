@@ -27,7 +27,12 @@ class IP extends Model
                             ->where(
                                 'created_at',
                                 '>=',
-                                Carbon::now()->subMonths(1)->format('Y-m-d')
+                                Carbon::now()->startOfMonth()->format('Y-m-d')
+                            )
+                            ->where(
+                                'created_at',
+                                '<=',
+                                Carbon::now()->endOfMonth()->format('Y-m-d')
                             )->get();
 
         foreach($disconnects as $disconnect){
