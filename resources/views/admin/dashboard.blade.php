@@ -7,7 +7,7 @@
             IP Addresses
         </h3>
 
-        <div>
+        <div class="table-responsive">
             <table class="table table-striped mt-5 text-center">
                 <thead>
                 <tr>
