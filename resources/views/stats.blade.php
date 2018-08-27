@@ -38,10 +38,9 @@
                              data-target="#collapse{{$loop->iteration}}"
                              aria-expanded="true"
                              aria-controls="collapse{{$loop->iteration}}">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <b>{{$stat['formatted_date']}}</b>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <b>{{$stat['formatted_date']}} - </b>
+
                                 <img src="{{!$stat['disconnects'] ? '/img/internet_up.png' : '/img/internet_down.png'}}" alt="" width="25">
                                 <b>{{$stat['disconnects']}}</b>
                             </div>
