@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import "~font-awesome/scss/font-awesome";
 @import '~bootstrap/scss/bootstrap';
-*{
-  font-family: 'Quicksand', sans-serif;
+body{
+  font-family: 'Quicksand', sans-serif !important;;
+}
+
+.accordion{
+  .card{
+    .card-header{
+      cursor:pointer;
+    }
+  }
 }

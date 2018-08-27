@@ -13,3 +13,5 @@ yarn-error.log
 .env
 /public/css
 /public/js
+/public/fonts
+/public/mix-manifest.json

@@ -62,7 +62,7 @@ class IP extends Model
             round($secs / 60, 1)
         ];
     }
-
+    
     public function hiddenIP(){
         $ip = explode(".",$this->ip);
         $ip[3] = '***';

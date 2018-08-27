@@ -7,6 +7,7 @@ use App\Rules\IPAccessible;
 use App\Rules\IPAddress;
 use App\Rules\IPBelongToUser;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
 class IPController extends Controller
@@ -83,19 +84,31 @@ class IPController extends Controller
     public function getIPStats($ip_address)
     {
         $curr_month = Carbon::now()->startOfMonth();
+        $dates = array_reverse(
+            $this->generateDateRange(
+                Carbon::now()->startOfMonth(),
+                Carbon::now()
+            )
+        );
+        $stats = [];
+
         $ip = IP::where('ip', '=', $ip_address)->first();
         if($ip){
-            $stats = $ip->log()
-                        ->whereRaw(
-                            'date(created_at) >= ?',
-                            $curr_month->format('Y-m-d')
-                        )
-                        ->whereRaw(
-                            'date(created_at) <= ?',
-                            Carbon::now()->endOfMonth()->format('Y-m-d')
-                        )
-                        ->orderBy('created_at', 'DESC')
-                        ->paginate(20);
+
+            foreach($dates as $date){
+                $daily_stats = $ip->log()
+                                ->whereRaw(
+                                    'date(created_at) = ?',
+                                    $date
+                                )->get();
+
+                $stats[$date] = [
+                    'logs' => $daily_stats,
+                    'disconnects' => $daily_stats->where('status', '=', 0)->count(),
+                    'formatted_date' => Carbon::parse($date)->toFormattedDateString(),
+                ];
+            }
+
             return view('stats', compact([
                 'ip', $ip,
                 'stats', $stats,
@@ -112,4 +125,16 @@ class IPController extends Controller
         $json = file_get_contents($url);
         return json_decode($json);
     }
+
+    private function generateDateRange(Carbon $start_date, Carbon $end_date)
+    {
+        $dates = [];
+
+        for($date = $start_date; $date->lte($end_date); $date->addDay()) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        return $dates;
+    }
+
 }

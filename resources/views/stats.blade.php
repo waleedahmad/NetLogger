@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 mr-auto ml-auto mt-5">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-10 mr-auto ml-auto mt-5">
 
         <h3 class="text-center mt-3">
             {{$ip->hiddenIP()}}
@@ -29,40 +29,67 @@
             Minutes
         </h5>
 
-        <div>
-            <table class="table table-striped mt-5 text-center">
-                <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($stats as $stat)
-                    <tr>
-                        <td>
-                            <img src="{{$stat->status ? '/img/internet_up.png' : '/img/internet_down.png'}}" alt="" width="35">
-                        </td>
-                        <td>
-                            <b>{{$stat->status ? 'Up' : 'Down'}}</b>
-                        </td>
-                        <td>
-                            {{$stat->created_at->format('h:i:s A')}}
+        <div class="accordion mt-5 mb-5" id="accordionExample">
+            @foreach($stats as $index => $stat)
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <div class="row text-center"
+                             data-toggle="collapse"
+                             data-target="#collapse{{$loop->iteration}}"
+                             aria-expanded="true"
+                             aria-controls="collapse{{$loop->iteration}}">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <b>{{$stat['formatted_date']}}</b>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <img src="{{!$stat['disconnects'] ? '/img/internet_up.png' : '/img/internet_down.png'}}" alt="" width="25">
+                                <b>{{$stat['disconnects']}}</b>
+                            </div>
+                        </div>
+                    </div>
 
-                        </td>
-                        <td>
-                            {{$stat->created_at->toDateString()}}
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    <div id="collapse{{$loop->iteration}}" class="collapse @if($loop->iteration === 1) show @endif " aria-labelledby="heading{{$loop->iteration}}" data-parent="#accordionExample">
+                        <div class="card-text">
+                            @if($stat['logs']->count())
+                                <table class="table table-striped text-center m-0">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($stat['logs'] as $stat)
+                                        <tr>
+                                            <td>
+                                                <img src="{{$stat->status ? '/img/internet_up.png' : '/img/internet_down.png'}}" alt="" width="35">
+                                            </td>
+                                            <td>
+                                                {{$stat->created_at->format('h:i:s A')}}
+
+                                            </td>
+                                            <td>
+                                                {{$stat->created_at->toDateString()}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <div class="text-center p-3">
+                                    No disconnects
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
 
-        <div class="text-center">
+
+        {{--<div class="text-center">
             {{ $stats->links() }}
-        </div>
+        </div>--}}
     </div>
 @endSection
