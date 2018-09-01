@@ -15,7 +15,7 @@ class IP extends Model
 
     public function disconnects(){
         return $this->hasMany(IPLog::class, 'ip_id', 'id')
-                    ->where('created_at', '>=', Carbon::now()->subMonths(1)->format('Y-m-d'))
+                    ->where('created_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
                     ->where('status', '=', 0);
     }
 
