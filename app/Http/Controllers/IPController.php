@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FindIPAddressFormRequest;
+use App\Http\Requests\IPAddressFormRequest;
 use App\IP;
-use App\Rules\IPAccessible;
-use App\Rules\IPAddress;
-use App\Rules\IPBelongToUser;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Http\Request;
 
 class IPController extends Controller
 {
@@ -21,66 +19,46 @@ class IPController extends Controller
         return view('add_ip');
     }
 
-    public function addIP(Request $request){
-        $messages = [
-            'unique' => ':attribute already exists in database.',
-        ];
+    /**
+     * Add a new IP Address
+     * @param IPAddressFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function addIP(IPAddressFormRequest $request){
+        $ip_info = $this->getIPInfo($request->ip_address);
+        $ip = new IP();
+        $ip->ip = $request->ip_address;
+        $ip->email = $request->email;
+        $ip->city = isset($ip_info->city) ? $ip_info->city : NULL;
+        $ip->region = isset($ip_info->region) ? $ip_info->region : NULL;
+        $ip->country = isset($ip_info->country) ? $ip_info->country : NULL;
+        $ip->loc = isset($ip_info->loc) ? $ip_info->loc : NULL;
+        $ip->postal = isset($ip_info->postal) ? $ip_info->postal : NULL;
+        $ip->org = isset($ip_info->org) ? $ip_info->org : NULL;
 
-        $validator = \Validator::make($request->all(), [
-            'ip_address' => [
-                'required',
-                new IPAddress(),
-                new IPAccessible(),
-                new IPBelongToUser(),
-                'unique:ip,ip'
-            ],
-            'email' => strlen($request->email) ? 'email' : ''
-        ], $messages);
-
-        if($validator->passes()){
-            $ip_info = $this->getIPInfo($request->ip_address);
-            $ip = new IP();
-            $ip->ip = $request->ip_address;
-            $ip->email = $request->email;
-            $ip->city = isset($ip_info->city) ? $ip_info->city : NULL;
-            $ip->region = isset($ip_info->region) ? $ip_info->region : NULL;
-            $ip->country = isset($ip_info->country) ? $ip_info->country : NULL;
-            $ip->loc = isset($ip_info->loc) ? $ip_info->loc : NULL;
-            $ip->postal = isset($ip_info->postal) ? $ip_info->postal : NULL;
-            $ip->org = isset($ip_info->org) ? $ip_info->org : NULL;
-
-            if($ip->save()){
-                $ip->log()->create([
-                    'status' => true
-                ]);
-                $request->session()->flash('message', 'Your IP has been added successfully');
-                return redirect('/add/ip');
-            }
-        }else{
-            return redirect('/add/ip')->withErrors($validator)->withInput();
+        if($ip->save()){
+            $ip->log()->create([
+                'status' => true
+            ]);
+            $request->session()->flash('message', 'Your IP has been added successfully');
+            return redirect('/add/ip');
         }
     }
 
-    public function findIP(Request $request){
-        $messages = [
-            'exists' => ':attribute does not exist in database.',
-        ];
-
-        $validator = \Validator::make($request->all(), [
-            'ip_address' => [
-                'required',
-                new IPAddress(),
-                'exists:ip,ip'
-            ]
-        ], $messages);
-
-        if($validator->passes()){
-            return redirect('/ip/'.$request->ip_address);
-        }else{
-            return redirect('/')->withErrors($validator)->withInput();
-        }
+    /**
+     * Redirect to IP logs route after validating IP Address
+     * @param FindIPAddressFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function findIP(FindIPAddressFormRequest $request){
+        return redirect('/ip/'.$request->ip_address);
     }
 
+    /**
+     * Display IP Address logs
+     * @param $ip_address
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getIPStats($ip_address)
     {
         $curr_month = Carbon::now()->startOfMonth();
@@ -120,12 +98,23 @@ class IPController extends Controller
         }
     }
 
+    /**
+     * Get IP Address ISP info
+     * @param $ip
+     * @return mixed
+     */
     private function getIPInfo($ip){
         $url = "https://ipinfo.io/$ip/json";
         $json = file_get_contents($url);
         return json_decode($json);
     }
 
+    /**
+     * Generate formatted date string between to dates
+     * @param Carbon $start_date
+     * @param Carbon $end_date
+     * @return array
+     */
     private function generateDateRange(Carbon $start_date, Carbon $end_date)
     {
         $dates = [];
