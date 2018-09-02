@@ -57,39 +57,17 @@ class IPController extends Controller
     /**
      * Display IP Address logs
      * @param $ip_address
+     * @param null $month
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getIPStats($ip_address)
+    public function getIPStats($ip_address, $month = null)
     {
-        $curr_month = Carbon::now()->startOfMonth();
-        $dates = array_reverse(
-            $this->generateDateRange(
-                Carbon::now()->startOfMonth(),
-                Carbon::now()
-            )
-        );
-        $stats = [];
-
+        $curr_month = Carbon::parse($month)->startOfMonth();
         $ip = IP::where('ip', '=', $ip_address)->first();
+
         if($ip){
-
-            foreach($dates as $date){
-                $daily_stats = $ip->log()
-                                ->whereRaw(
-                                    'date(created_at) = ?',
-                                    $date
-                                )->get();
-
-                $stats[$date] = [
-                    'logs' => $daily_stats,
-                    'disconnects' => $daily_stats->where('status', '=', 0)->count(),
-                    'formatted_date' => Carbon::parse($date)->toFormattedDateString(),
-                ];
-            }
-
             return view('stats', compact([
                 'ip', $ip,
-                'stats', $stats,
                 'curr_month' , $curr_month
             ]));
         }else{
@@ -107,23 +85,6 @@ class IPController extends Controller
         $url = "https://ipinfo.io/$ip/json";
         $json = file_get_contents($url);
         return json_decode($json);
-    }
-
-    /**
-     * Generate formatted date string between to dates
-     * @param Carbon $start_date
-     * @param Carbon $end_date
-     * @return array
-     */
-    private function generateDateRange(Carbon $start_date, Carbon $end_date)
-    {
-        $dates = [];
-
-        for($date = $start_date; $date->lte($end_date); $date->addDay()) {
-            $dates[] = $date->format('Y-m-d');
-        }
-
-        return $dates;
     }
 
 }

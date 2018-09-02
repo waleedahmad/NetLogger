@@ -11,6 +11,8 @@ Route::post('/ip', 'IPController@addIP');
 Route::get('/ip', 'IPController@findIP');
 
 Route::get('/ip/{ip}', 'IPController@getIPStats');
+Route::get('/ip/{ip}/{month}', 'IPController@getIPStats');
+
 
 Route::get('/register', function(){abort(404);});
 
