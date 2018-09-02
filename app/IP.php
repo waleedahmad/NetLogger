@@ -21,7 +21,6 @@ class IP extends Model
     }
 
     public function downtime($month = null){
-        $start = $end = null;
         $secs = 0;
 
         $logs = $this->getMonthlyLogs($month, 'ASC');
@@ -75,8 +74,8 @@ class IP extends Model
         }
 
         return [
-            round($secs / 60 / 60, 1),
-            round($secs / 60, 1)
+            'hours' => round($secs / 60 / 60, 1),
+            'minutes' => round($secs / 60, 1)
         ];
     }
     

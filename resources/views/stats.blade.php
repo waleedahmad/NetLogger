@@ -19,10 +19,10 @@
 
         <h5 class="text-center mt-3">
             Remained down for
-            <span class="text-primary">{{$ip->downtime($curr_month)[0]}}</span>
+            <span class="text-primary">{{$downtime['hours']}}</span>
             Hours or
             <span class="text-primary">
-                {{$ip->downtime($curr_month)[1]}}
+                {{$downtime['minutes']}}
             </span>
             Minutes
         </h5>

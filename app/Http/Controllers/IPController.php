@@ -64,12 +64,13 @@ class IPController extends Controller
     {
         $curr_month = Carbon::parse($month)->startOfMonth();
         $ip = IP::where('ip', '=', $ip_address)->first();
+        $downtime = $ip->downtime($curr_month);
 
         if($ip){
             return view('stats', compact([
                 'ip', $ip,
-                'curr_month' , $curr_month
-            ]));
+                'curr_month' , $curr_month,
+            ]))->with('downtime', $downtime);
         }else{
             return view('404')
                         ->with('ip', $ip_address);
@@ -85,6 +86,14 @@ class IPController extends Controller
         $url = "https://ipinfo.io/$ip/json";
         $json = file_get_contents($url);
         return json_decode($json);
+    }
+
+    public function showIPStats($month = null){
+        $curr_month = Carbon::parse($month)->startOfMonth();
+        $ips = IP::all();
+        return view('reports')
+                    ->with('ips', $ips)
+                    ->with('month', $curr_month);
     }
 
 }

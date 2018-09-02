@@ -10,7 +10,13 @@ Route::post('/ip', 'IPController@addIP');
 
 Route::get('/ip', 'IPController@findIP');
 
+Route::get('/reports/', 'IPController@showIPStats');
+
+Route::get('/reports/{month}', 'IPController@showIPStats');
+
+
 Route::get('/ip/{ip}', 'IPController@getIPStats');
+
 Route::get('/ip/{ip}/{month}', 'IPController@getIPStats');
 
 
