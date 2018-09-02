@@ -42,17 +42,17 @@ class LogIPs extends Command
 
         foreach($ips as $ip){
 
-            $last_record = $ip->log()->orderBy('created_at', '=', 'desc')->first();
+            $last_record = $ip->logs()->orderBy('created_at', '=', 'desc')->first();
 
             if($this->isReachable($ip->ip)){
                 if(!$last_record->status){
-                    $ip->log()->create([
+                    $ip->logs()->create([
                         'status' => true,
                     ]);
                 }
             }else{
                 if($last_record->status){
-                    $ip->log()->create([
+                    $ip->logs()->create([
                         'status' => false,
                     ]);
                 }

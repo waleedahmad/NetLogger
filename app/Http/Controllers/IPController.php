@@ -37,7 +37,7 @@ class IPController extends Controller
         $ip->org = isset($ip_info->org) ? $ip_info->org : NULL;
 
         if($ip->save()){
-            $ip->log()->create([
+            $ip->logs()->create([
                 'status' => true
             ]);
             $request->session()->flash('message', 'Your IP has been added successfully');
