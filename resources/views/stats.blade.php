@@ -44,7 +44,7 @@
         @endif
 
 
-        <div class="accordion mt-5 mb-5" id="accordionExample">
+        <div class="accordion mt-3 mb-5" id="accordionExample">
             @foreach($ip->getMonthlyLogs($curr_month->format('Y-m')) as $m_index => $month)
                 @php
                     $days = $month->groupBy(function($date){
