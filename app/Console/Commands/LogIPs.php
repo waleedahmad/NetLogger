@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\IP;
+use App\Jobs\PingIP;
 use Illuminate\Console\Command;
 
 class LogIPs extends Command
@@ -41,27 +42,8 @@ class LogIPs extends Command
         $ips = IP::all();
 
         foreach($ips as $ip){
-
             $last_record = $ip->logs()->orderBy('created_at', '=', 'desc')->first();
-
-            if($this->isReachable($ip->ip)){
-                if(!$last_record->status){
-                    $ip->logs()->create([
-                        'status' => true,
-                    ]);
-                }
-            }else{
-                if($last_record->status){
-                    $ip->logs()->create([
-                        'status' => false,
-                    ]);
-                }
-            }
+            PingIP::dispatch($ip, $last_record);
         }
-    }
-
-    private function isReachable($ip) {
-        $pingresult = exec("/bin/ping -c 4 $ip", $outcome, $status);
-        return $status === 0;
     }
 }
