@@ -4,15 +4,11 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mr-auto ml-auto">
 
         <h3 class="text-center mt-5">
-            IP Addresses
+            {{$month->format('M Y')}} Stats
         </h3>
 
-        <h5 class="text-center mt-3">
-            {{$month->format('M Y')}} Stats
-        </h5>
-
         <div class="table-responsive">
-            <table class="table table-striped mt-3 text-center">
+            <table class="table table-striped mt-3 mb-5 text-center">
                 <thead>
                 <tr>
                     <th scope="col">IP</th>
@@ -20,6 +16,7 @@
                     <th scope="col">Downtime</th>
                     <th scope="col">Disconnects</th>
                     <th scope="col">Added</th>
+                    <th scope="col">Logs</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -54,6 +51,10 @@
                         </td>
                         <td>
                             {{$ip->created_at->format('Y-m-d g:i:s A')}}
+                        </td>
+                        
+                        <td>
+                            <a target="_blank" href="/ip/{{$ip->id}}">view</a>
                         </td>
                     </tr>
                     @endif

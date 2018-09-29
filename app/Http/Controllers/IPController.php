@@ -51,19 +51,20 @@ class IPController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function findIP(FindIPAddressFormRequest $request){
-        return redirect('/ip/'.$request->ip_address);
+        $ip = IP::where('ip', '=', $request->ip_address)->first();
+        return redirect('/ip/'.$ip->id);
     }
 
     /**
      * Display IP Address logs
-     * @param $ip_address
+     * @param $id
      * @param null $month
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getIPStats($ip_address, $month = null)
+    public function getIPStats($id, $month = null)
     {
         $curr_month = Carbon::parse($month)->startOfMonth();
-        $ip = IP::where('ip', '=', $ip_address)->first();
+        $ip = IP::find($id);
         $downtime = $ip->downtime($curr_month);
 
         if($ip){
@@ -73,7 +74,7 @@ class IPController extends Controller
             ]))->with('downtime', $downtime);
         }else{
             return view('404')
-                        ->with('ip', $ip_address);
+                        ->with('ip', $ip->ip);
         }
     }
 

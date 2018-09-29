@@ -32,7 +32,7 @@
             <div class="mt-3 mb-3">
                 <select class="form-control col-xs-12 col-sm-12 col-md-6 col-lg-4 m-auto"
                         id="current-month"
-                        data-ip="{{$ip->ip}}">
+                        data-id="{{$ip->id}}">
                     @foreach($ip->getMonthlyLogs() as $date => $month)
                         <option value="{{$date}}"
                                 @if(Carbon\Carbon::parse($curr_month)->format('M Y') === Carbon\Carbon::parse($date)->format('M Y')) selected @endif>
@@ -93,7 +93,6 @@
 
                                                 <td>
                                                     {{$stat->created_at->format('h:i:s A')}}
-
                                                 </td>
                                             </tr>
                                         @endforeach

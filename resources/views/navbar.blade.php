@@ -11,6 +11,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
 
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports">Reports</a>
+                </li>
+
                 @if(!request()->is('dashboard'))
                     <li class="nav-item">
                         <a class="nav-link" href="/add/ip">Add your IP</a>

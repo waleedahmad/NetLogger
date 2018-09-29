@@ -8,7 +8,7 @@
         </h3>
 
         <div class="table-responsive">
-            <table class="table table-striped mt-5 text-center">
+            <table class="table table-striped mt-5 mb-5 text-center">
                 <thead>
                 <tr>
                     <th scope="col">IP</th>
@@ -42,7 +42,7 @@
                             {{$ip->created_at}}
                         </td>
                         <td>
-                            <a target="_blank" href="/ip/{{$ip->ip}}">view</a>
+                            <a target="_blank" href="/ip/{{$ip->id}}">view</a>
                         </td>
 
                         <td></td>
