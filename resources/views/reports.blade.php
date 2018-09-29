@@ -55,14 +55,14 @@
                         </td>
 
                         <td>
-                            {{$ip->downtime($month)['minutes']}} mins or
+                            {{$ip->downtime($month)['minutes']}} mins
                             {{$ip->downtime($month)['hours']}} hours
                         </td>
                         <td>
                             {{$ip->disconnects($month->format('M Y'))->count()}}
                         </td>
                         <td>
-                            {{$ip->created_at->format('Y-m-d g:i:s A')}}
+                            {{$ip->created_at->format('M Y')}}
                         </td>
                         
                         <td>
