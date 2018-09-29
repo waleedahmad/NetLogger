@@ -16,7 +16,6 @@
             disconnect(s) in {{$curr_month->format('M Y')}}
         </h5>
 
-
         <h5 class="text-center mt-3">
             Remained down for
             <span class="text-primary">{{$downtime['hours']}}</span>
@@ -26,7 +25,6 @@
             </span>
             Minutes
         </h5>
-
 
         @if($ip->getMonthlyLogs()->count() > 1)
             <div class="mt-3 mb-3">
@@ -42,7 +40,6 @@
                 </select>
             </div>
         @endif
-
 
         <div class="accordion mt-3 mb-5" id="accordionExample">
             @foreach($ip->getMonthlyLogs($curr_month->format('Y-m')) as $m_index => $month)

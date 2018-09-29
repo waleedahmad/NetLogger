@@ -14,15 +14,16 @@ Route::get('/reports/', 'IPController@showIPStats');
 
 Route::get('/reports/{month}', 'IPController@showIPStats');
 
-
 Route::get('/ip/{ip}', 'IPController@getIPStats');
 
 Route::get('/ip/{ip}/{month}', 'IPController@getIPStats');
 
-
 Route::get('/register', function(){abort(404);});
 
 Route::group(['middleware' => ['auth']] , function(){
+
     Route::get('/dashboard', 'AdminController@viewIPs');
+
     Route::get('/logout', 'Auth\LoginController@logout');
+
 });

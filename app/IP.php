@@ -9,10 +9,19 @@ class IP extends Model
 {
     protected $table = 'ip';
 
+    /**
+     * Return IP logs
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function logs(){
         return $this->hasMany(IPLog::class, 'ip_id', 'id');
     }
 
+    /**
+     * Return IP disconnects
+     * @param null $month
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function disconnects($month = null){
         return $this->hasMany(IPLog::class, 'ip_id', 'id')
                     ->where('created_at', '>=', Carbon::parse($month)->startOfMonth()->format('Y-m-d'))
@@ -20,6 +29,11 @@ class IP extends Model
                     ->where('status', '=', 0);
     }
 
+    /**
+     * Calculates IP downtime
+     * @param null $month
+     * @return array
+     */
     public function downtime($month = null){
         $secs = 0;
 
@@ -78,13 +92,23 @@ class IP extends Model
             'minutes' => round($secs / 60, 1)
         ];
     }
-    
+
+    /**
+     * Return a hidden IP for public display
+     * @return string
+     */
     public function hiddenIP(){
         $ip = explode(".",$this->ip);
         $ip[3] = '***';
         return implode('.', $ip);
     }
 
+    /**
+     * Return IP logs grouped by month
+     * @param null $month
+     * @param string $orderBy
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getMonthlyLogs($month = null, $orderBy = 'DESC'){
         $logs = $this->logs();
         $logs = $month ? $logs->whereRaw(
@@ -98,7 +122,7 @@ class IP extends Model
         return $logs->orderBy('created_at', $orderBy)
                     ->get()
                     ->groupBy(function($date) use ($month){
-                        return Carbon::parse($month ? $month : $date->created_at)->format('Y-m');
+                        return Carbon::parse($month ? $month : $date->created_at)->format('Y-M');
                     });
     }
 }

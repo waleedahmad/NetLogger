@@ -7,6 +7,7 @@ use App\Http\Requests\IPAddressFormRequest;
 use App\IP;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\DB;
 
 class IPController extends Controller
 {
@@ -89,12 +90,21 @@ class IPController extends Controller
         return json_decode($json);
     }
 
+    /**
+     * Public IP stats
+     * @param null $month
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showIPStats($month = null){
         $curr_month = Carbon::parse($month)->startOfMonth();
+        $months = IP::all()->groupBy(function($d) {
+            return Carbon::parse($d->created_at)->format('Y-M');
+        })->toArray();
         $ips = IP::all();
         return view('reports')
                     ->with('ips', $ips)
-                    ->with('month', $curr_month);
+                    ->with('month', $curr_month)
+                    ->with('months', $months);
     }
 
 }
