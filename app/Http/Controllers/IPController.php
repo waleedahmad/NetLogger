@@ -65,17 +65,18 @@ class IPController extends Controller
     public function getIPStats($id, $month = null)
     {
         $curr_month = Carbon::parse($month)->startOfMonth();
-        $ip = IP::find($id);
-        $downtime = $ip->downtime($curr_month);
 
-        if($ip){
+        $ip = IP::where('id', '=', $id)->orWhere('ip', $id);
+
+        if($ip->count()){
+            $ip = $ip->first();
+            $downtime = $ip->downtime($curr_month);
             return view('stats', compact([
                 'ip', $ip,
                 'curr_month' , $curr_month,
             ]))->with('downtime', $downtime);
         }else{
-            return view('404')
-                        ->with('ip', $ip->ip);
+            return view('404');
         }
     }
 
