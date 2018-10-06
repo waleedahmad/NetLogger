@@ -93,6 +93,10 @@ class IP extends Model
         ];
     }
 
+    public function dailyDownTime($timestamp){
+
+    }
+
     /**
      * Return a hidden IP for public display
      * @return string

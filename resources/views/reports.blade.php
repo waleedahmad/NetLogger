@@ -10,10 +10,10 @@
         <div class="mt-3 mb-2">
             <select class="form-control col-xs-12 col-sm-12 col-md-6 col-lg-4 m-auto"
                     id="stat-month">
-                @foreach($months as $curr_month => $log_month)
-                    <option value="{{$curr_month}}"
-                            @if(Carbon\Carbon::parse($month)->format('M Y') === Carbon\Carbon::parse($curr_month)->format('M Y')) selected @endif>
-                        {{Carbon\Carbon::parse($curr_month)->format('M Y')}}
+                @foreach($months as $log_month)
+                    <option value="{{$log_month}}"
+                            @if(Carbon\Carbon::parse($month)->format('M Y') === Carbon\Carbon::parse($log_month)->format('M Y')) selected @endif>
+                        {{Carbon\Carbon::parse($log_month)->format('M Y')}}
                     </option>
                 @endforeach
             </select>

@@ -7,6 +7,9 @@ use App\Http\Requests\IPAddressFormRequest;
 use App\IP;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class IPController extends Controller
@@ -98,14 +101,29 @@ class IPController extends Controller
      */
     public function showIPStats($month = null){
         $curr_month = Carbon::parse($month)->startOfMonth();
-        $months = IP::all()->groupBy(function($d) {
-            return Carbon::parse($d->created_at)->format('Y-M');
-        })->toArray();
+        $months = $this->getNetLoggerOperationalMonths();
         $ips = IP::all();
         return view('reports')
                     ->with('ips', $ips)
                     ->with('month', $curr_month)
                     ->with('months', $months);
+    }
+
+    /**
+     * Returns an array of Netlogger operational months
+     * @return array
+     */
+    private function getNetLoggerOperationalMonths(){
+        $start    = new Carbon('2018-08');
+        $end      = Carbon::now();
+        $interval = DateInterval::createFromDateString('1 month');
+        $period   = new DatePeriod($start, $interval, $end);
+        $months = [];
+
+        foreach ($period as $dt) {
+            $months[] = $dt->format("Y-m");
+        }
+        return $months;
     }
 
 }
