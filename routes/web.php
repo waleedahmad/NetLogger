@@ -18,6 +18,8 @@ Route::get('/ip/{ip}', 'IPController@getIPStats');
 
 Route::get('/ip/{ip}/{month}', 'IPController@getIPStats');
 
+Route::get('/visual/{ip}', 'IPController@getVisualStats');
+
 Route::get('/register', function(){abort(404);});
 
 Route::group(['middleware' => ['auth']] , function(){

@@ -8,7 +8,7 @@
         </h3>
 
         <h5 class="text-center mt-4">
-            Network Stats
+            Network Stats <a href="/visual/{{$ip->id}}"><i class="fa fa-bar-chart text-primary" aria-hidden="true"></i></a>
         </h5>
 
         <h5 class="text-center mt-3">

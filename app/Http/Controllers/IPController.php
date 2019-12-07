@@ -126,4 +126,35 @@ class IPController extends Controller
         return $months;
     }
 
+    public function getVisualStats($id)
+    {
+        $curr_month = Carbon::parse(null)->startOfMonth();
+
+        $ip = IP::where('id', '=', $id)->orWhere('ip', $id);
+
+        if($ip->count()){
+            $ip = $ip->first();
+            $downtime = $ip->downtime($curr_month);
+            $stats = [];
+            foreach ($ip->getMonthlyLogs() as $date => $month){
+                $formatted_date = Carbon::parse($date)->format('M Y');
+                $stats[] = [
+                    $formatted_date,
+                    $ip->downtime($date)['hours'],
+                    '007bff'
+                ];
+            }
+            $stats[] = ["Month", "Downtime", ['role' => 'style']];
+            $stats = array_reverse($stats);
+
+            return view('charts', compact([
+                'ip', $ip,
+                'curr_month' , $curr_month,
+                'stats', $stats
+            ]))->with('downtime', $downtime);
+
+        }else{
+            return view('404');
+        }
+    }
 }

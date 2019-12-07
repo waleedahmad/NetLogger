@@ -15,6 +15,10 @@
 <div class="container">
     @yield('content')
 </div>
+
+@yield('stats')
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="{{mix('/js/app.js')}}"></script>
 </body>
 </html>
