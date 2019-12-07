@@ -136,21 +136,37 @@ class IPController extends Controller
             $ip = $ip->first();
             $downtime = $ip->downtime($curr_month);
             $stats = [];
+            $losses = [];
+            $total_loss = 0;
             foreach ($ip->getMonthlyLogs() as $date => $month){
                 $formatted_date = Carbon::parse($date)->format('M Y');
+                $hours = $ip->downtime($date)['hours'];
+                $price = 3360 / 730.001;
+                $loss = $price * $hours;
+                $total_loss += $loss;
                 $stats[] = [
                     $formatted_date,
-                    $ip->downtime($date)['hours'],
+                    $hours,
+                    '007bff'
+                ];
+
+                $losses[] = [
+                    $formatted_date,
+                    floatval(number_format($loss, 2)),
                     '007bff'
                 ];
             }
             $stats[] = ["Month", "Downtime", ['role' => 'style']];
+            $losses[] = ["Month", "Loss", ['role' => 'style']];
             $stats = array_reverse($stats);
+            $losses = array_reverse($losses);
 
             return view('charts', compact([
                 'ip', $ip,
                 'curr_month' , $curr_month,
-                'stats', $stats
+                'stats', $stats,
+                'losses', $losses,
+                'total_loss', $total_loss
             ]))->with('downtime', $downtime);
 
         }else{
