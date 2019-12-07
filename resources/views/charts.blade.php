@@ -14,12 +14,5 @@
         <div id="chart"
              data-stats="{{json_encode($stats)}}"
              style="width: 100%"></div>
-
-        @if($ip->id === 1)
-            <div id="losses"
-                 data-losses="{{json_encode($losses)}}"
-                 data-total-loss="{{number_format($total_loss)}}"
-                 style="width: 100%"></div>
-        @endif
     </div>
 @endSection
