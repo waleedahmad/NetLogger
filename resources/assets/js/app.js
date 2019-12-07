@@ -35,7 +35,7 @@ function drawChart() {
             2]);
 
         let options = {
-            title: "Fiberlink Downtime",
+            title: "Connection Downtime",
             height: 400,
             bar: {groupWidth: "95%"},
             legend: {position: "none"},
